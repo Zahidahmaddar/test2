@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser, showPosts } from "./Redux/Actions";
 
-function Home({ setLogin }) {
+function Home() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [state, setState] = useState([]);
+  // const [posts, setPosts] = useState([]);
+
+  const posts = useSelector((state) => state.posts);
 
   const handleSubmit = () => {
     setState([{}, ...state]);
@@ -14,6 +20,15 @@ function Home({ setLogin }) {
     state.splice(index, 1);
     setState([...state]);
   };
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/posts")
+      .then((response) => response.json())
+      .then((json) => {
+        dispatch(showPosts(json));
+        // setPosts(json);
+      });
+  }, []);
 
   return (
     <div className="container">
@@ -74,6 +89,16 @@ function Home({ setLogin }) {
         );
       })}
 
+      {posts.length &&
+        posts.map((item) => (
+          <>
+            <h3>UserId: {item.userId}</h3>
+            <h1>id: {item.id}</h1>
+            <p>Title: {item.title}</p>
+            <p>Body: {item.body}</p>
+          </>
+        ))}
+
       <div>
         <button
           style={{
@@ -85,7 +110,8 @@ function Home({ setLogin }) {
             marginTop: "50px",
           }}
           onClick={() => {
-            setLogin(false);
+            // setLogin(false);
+            dispatch(logoutUser());
             localStorage.removeItem("user");
             navigate("/login-form");
           }}

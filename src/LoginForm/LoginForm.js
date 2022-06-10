@@ -3,6 +3,8 @@ import { useNavigate } from "react-router";
 import "../LoginForm/LoginForm.css";
 import Data from "../credentials.json";
 import { Navigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../Redux/Actions";
 
 function LoginForm({ setLogin }) {
   const navigate = useNavigate();
@@ -12,13 +14,15 @@ function LoginForm({ setLogin }) {
   const [passwordError, setPasswordError] = useState(false);
   const [inavlidCredentials, setInvalidCredentials] = useState(false);
 
-  const [userlogged, setUserLogged] = useState("");
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (username === Data.email && password === Data.password) {
-      setLogin(true);
+      // setLogin(true);
+      dispatch(loginUser());
+
       localStorage.setItem("user", true);
       navigate("/home");
     } else {
