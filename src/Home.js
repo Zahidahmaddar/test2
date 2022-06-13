@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser, showPosts } from "./Redux/Actions";
+import { getUsersFetch } from "./Redux/Actions/index";
 
 function Home() {
   const navigate = useNavigate();
@@ -10,7 +11,8 @@ function Home() {
   const [state, setState] = useState([]);
   // const [posts, setPosts] = useState([]);
 
-  const posts = useSelector((state) => state.posts);
+  const { users } = useSelector((state) => state.myFirstReducer);
+  console.log("//////", users);
 
   const handleSubmit = () => {
     setState([{}, ...state]);
@@ -22,12 +24,8 @@ function Home() {
   };
 
   useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/posts")
-      .then((response) => response.json())
-      .then((json) => {
-        dispatch(showPosts(json));
-        // setPosts(json);
-      });
+    dispatch(getUsersFetch());
+    // setPosts(json)
   }, []);
 
   return (
@@ -89,7 +87,7 @@ function Home() {
         );
       })}
 
-      {posts.length &&
+      {/* {posts.length &&
         posts.map((item) => (
           <>
             <h3>UserId: {item.userId}</h3>
@@ -97,7 +95,20 @@ function Home() {
             <p>Title: {item.title}</p>
             <p>Body: {item.body}</p>
           </>
-        ))}
+        ))} */}
+      <div>
+        Users:{" "}
+        {users &&
+          users.length > 0 &&
+          users.map((user, index) => (
+            <div>
+              {" "}
+              <p>{user.id}</p>
+              <p>{user.title}</p>
+              <p>{user.body}</p>
+            </div>
+          ))}
+      </div>
 
       <div>
         <button
