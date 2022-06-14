@@ -9,7 +9,6 @@ function usersFetch() {
 
 function* workGetUsersFetch() {
   const users = yield call(usersFetch);
-  console.log("first", users);
   yield put({ type: GET_USERS_SUCCESS, payload: users });
 }
 

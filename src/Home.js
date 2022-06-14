@@ -12,7 +12,6 @@ function Home() {
   // const [posts, setPosts] = useState([]);
 
   const { users } = useSelector((state) => state.myFirstReducer);
-  console.log("//////", users);
 
   const handleSubmit = () => {
     setState([{}, ...state]);
